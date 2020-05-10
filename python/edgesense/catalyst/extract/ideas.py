@@ -1,3 +1,4 @@
+from builtins import filter
 from collections import defaultdict
 from edgesense.catalyst.namespaces import SIOC, DCTERMS, RDF, IDEA, ASSEMBL
 from . import convert_to_network
@@ -13,7 +14,7 @@ def extract_ideas(graph, creator_of_post=None):
         }
     def has_creator(n):
         return creator_of_post.get(n, None) is not None
-    node_ids = filter(has_creator, node_ids)
+    node_ids = list(filter(has_creator, node_ids))
     if not node_ids:
         return ([], {})
     sources = {link: node for (link, p, node) in graph.triples((None, IDEA.source_idea, None)) if node in node_ids}
@@ -21,7 +22,7 @@ def extract_ideas(graph, creator_of_post=None):
     # filter incomplete edges (with no usable source or target)
     def complete_edge(edge):
         return sources.get(edge, None) is not None and targets.get(edge, None) is not None
-    edge_ids = filter(complete_edge, edge_ids)
+    edge_ids = list(filter(complete_edge, edge_ids))
     reply_of = defaultdict(list)
     # some edges will act as ideas; if the creator is different from the source.
     pseudo_nodes = []
@@ -50,7 +51,7 @@ def extract_posts(graph, creator_of_post=None):
         }
     def has_creator(n):
         return creator_of_post.get(n, None) is not None
-    node_ids = filter(has_creator, node_ids)
+    node_ids = list(filter(has_creator, node_ids))
     if not node_ids:
         return ([], {})
     reply_of = {

@@ -1,5 +1,7 @@
 # requires flask and flask-cors
-import os, sys, urlparse
+from future import standard_library
+standard_library.install_aliases()
+import os, sys, urllib.parse
 import json
 from datetime import datetime
 import time

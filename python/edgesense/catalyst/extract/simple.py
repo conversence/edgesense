@@ -1,3 +1,4 @@
+from builtins import str
 from datetime import datetime
 import time
 import logging
@@ -54,12 +55,12 @@ def extract_users(posts_mapped):
     for user in [map_user(post) for post in posts_mapped]:
         if not(user['uid'] in users_map) or user['created'] <= users_map[user['uid']]['created']:
             users_map[user['uid']] = user
-    return users_map.values()
+    return list(users_map.values())
 
 def users_nodes_comments_from(graph):
     # mapping posts      
     all_posts_mapped = [get_post_map(post, graph) for post in graph.subjects(RDF.type, CatalystPost)]
-    all_posts_mapped = filter(None, all_posts_mapped)
+    all_posts_mapped = [_f for _f in all_posts_mapped if _f]
     # users are the creators of the posts
     all_users = extract_users(all_posts_mapped)
     # nodes are posts without a reply_of

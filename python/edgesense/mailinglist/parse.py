@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from builtins import str
 from .threading import *
 
 def promote_none_root_set_children(containers):
@@ -20,28 +21,28 @@ def force_name_as_address(containers):
     
 def map_user(container, moderators, charset='utf-8'):
     user = {
-        'uid': unicode(container.message.sender_address, charset),
+        'uid': str(container.message.sender_address, charset),
         'created': container.message.created
     }
     if container.message.sender_name:
-        user['name'] = unicode(container.message.sender_name, charset)
+        user['name'] = str(container.message.sender_name, charset)
     if user['uid'] in moderators:
         user['roles'] = 'Moderator'
     return user
 
 def map_node(container, charset='utf-8'):
     node = {
-        'nid': unicode(container.message.message_id, charset),
-        'uid': unicode(container.message.sender_address, charset),
+        'nid': str(container.message.message_id, charset),
+        'uid': str(container.message.sender_address, charset),
         'created': container.message.created
     }
     return node
 
 def map_comment(container, root_message, charset='utf-8'):
     comment = {
-        'cid': unicode(container.message.message_id, charset),
-        'uid': unicode(container.message.sender_address, charset),
-        'nid': unicode(root_message.message.message_id, charset),
+        'cid': str(container.message.message_id, charset),
+        'uid': str(container.message.sender_address, charset),
+        'nid': str(root_message.message.message_id, charset),
         'created': container.message.created
     }
     if container.parent and container.parent.message:
@@ -70,5 +71,5 @@ def users_nodes_comments_from(containers, moderators, charset='utf-8'):
         
         add_comments_from(container, container, comments, user_map, moderators, charset)
     
-    users = user_map.values()
+    users = list(user_map.values())
     return(users,nodes,comments)

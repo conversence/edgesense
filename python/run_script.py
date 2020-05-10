@@ -22,6 +22,6 @@ if __name__ == "__main__":
     if what in functions:
         functions[what]()
     else:
-        print('Wrong function called, valid: '+', '.join(function.keys()))
+        print('Wrong function called, valid: '+', '.join(list(function.keys())))
 
 

@@ -8,6 +8,7 @@ This code is under a BSD-style license;
 
 """
 
+from builtins import object
 import re
 from email.utils import parsedate_tz, mktime_tz
 from collections import deque
@@ -26,7 +27,7 @@ restrip_regexp = re.compile("""(
 \s*)+
 """, re.I | re.VERBOSE)
 
-class Container:
+class Container(object):
     """Contains a tree of messages.
 
     Instance attributes:

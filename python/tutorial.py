@@ -1,6 +1,7 @@
 from __future__ import print_function
 # This program rearranges raw Egderyders data and builds two lists of dicts, userlist and ciommentslist, containing 
 # of the data needed to buildm graphs. These objects are then saved into files.
+from builtins import str
 import os, sys
 import json
 import csv
@@ -105,7 +106,7 @@ def main(argv):
     with open(outuput_filename, 'wb') as f:  
         w = csv.DictWriter(f, headers)
         w.writeheader()
-        w.writerows(runs.values())
+        w.writerows(list(runs.values()))
         
     logging.info("Tutorial result processing - Completed")  
 

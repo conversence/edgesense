@@ -1,4 +1,7 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import range
+from past.utils import old_div
 from datetime import datetime
 import time
 import logging
@@ -180,11 +183,11 @@ def calculate_timestamp_range(network, timestep_size=60*60*24*7, timestep_window
     end_ts = network['edges'][-1]['ts'] # last timestamp in the edges
     day_ts = 60*60*24
     if timestep_count:
-        timestep = max(int(round((end_ts-start_ts)/timestep_count)), day_ts)
+        timestep = max(int(round(old_div((end_ts-start_ts),timestep_count))), day_ts)
     else:
         timestep = timestep_size
     
-    timesteps_range = range(start_ts, end_ts, timestep)
+    timesteps_range = list(range(start_ts, end_ts, timestep))
     if timesteps_range[-1]<end_ts :
         timesteps_range.append(end_ts)
     

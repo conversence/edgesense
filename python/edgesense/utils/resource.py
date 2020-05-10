@@ -1,7 +1,9 @@
+from future import standard_library
+standard_library.install_aliases()
 import os
 import json
 import csv
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import base64
 import logging
 from . import gexf
@@ -41,11 +43,11 @@ def get_data(thing, username=None, password=None):
         thing = "file://"+thing
     # Adds the Basic http authenticaton header if needed
     if username and password:
-        thing = urllib2.Request(thing)
+        thing = urllib.request.Request(thing)
         base64string = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
         thing.add_header("Authorization", "Basic %s" % base64string)   
            
-    data = urllib2.urlopen(thing)
+    data = urllib.request.urlopen(thing)
     return data
     
 def load(thing, username=None, password=None, dump_to=None):

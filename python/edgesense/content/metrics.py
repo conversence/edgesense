@@ -1,3 +1,4 @@
+from builtins import str
 import networkx as nx
 import community as co
 from edgesense.network.utils import extract_dpsg

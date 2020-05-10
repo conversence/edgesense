@@ -62,7 +62,7 @@ def extract_edges(nodes_map, comments_map):
     edges_list = []
     # a comment is 'valid' if it has a recipient and an author
     valid_comments = [e for e in comments_map.values() if e.get('recipient_id', None) and e.get('author_id', None)]
-    logging.info("%(v)i valid comments on %(t)i total" % {'v':len(valid_comments), 't':len(comments_map.values())})
+    logging.info("%(v)i valid comments on %(t)i total" % {'v':len(valid_comments), 't':len(list(comments_map.values()))})
     
     # build the comments network to use for metrics
     for comment in valid_comments:
@@ -91,7 +91,7 @@ def extract_multiauthor_post_edges(nodes_map, posts_map):
     edges_list = []
     # a comment is 'valid' if it has a recipient and an author
     multiauthor_posts = [e for e in posts_map.values() if e.get('all_authors', None) and hasattr(e.get('all_authors', None), '__iter__') and len(e.get('all_authors', None))>1]
-    logging.info("%(v)i multiauthor posts on %(t)i total" % {'v':len(multiauthor_posts), 't':len(posts_map.values())})
+    logging.info("%(v)i multiauthor posts on %(t)i total" % {'v':len(multiauthor_posts), 't':len(list(posts_map.values()))})
     
     # build the posts network to use for metrics
     for post in multiauthor_posts:

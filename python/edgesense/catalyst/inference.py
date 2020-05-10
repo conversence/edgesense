@@ -1,9 +1,12 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import sys
 from os import path
 from os.path import exists, abspath
 import requests
 import logging
-import cStringIO as StringIO
+import io as StringIO
 from abc import abstractmethod
 
 import rdflib
@@ -136,7 +139,7 @@ class SimpleInferenceStore(InferenceStore):
         roots = set(graph.subjects(
             property, None))
         for r in roots:
-            for o in list(graph.transitive_objects(r, property)):
+            for o in graph.transitive_objects(r, property):
                 t = (r, property, o)
                 if t not in graph:
                     graph.add(t)

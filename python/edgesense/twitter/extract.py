@@ -24,7 +24,7 @@ def extract_users(tweets):
         for mention in tweet['user_mentions']:
             add_user(users_map, mention['user_id'], mention['screen_name'], tweet['created_ts'])
             
-    return users_map.values()
+    return list(users_map.values())
     
 """ Maps the tweet user into the required data structure for the nodes (used by the
     network script.)
@@ -52,7 +52,7 @@ def extract_nodes(tweets):
         for mention in tweet['user_mentions']:
             add_node(nodes_map, mention['user_id'], mention['screen_name'], tweet['created_ts'], tweet['text'])
             
-    return nodes_map.values()
+    return list(nodes_map.values())
     
 """ We consider each tweet a comment towards all the mentioned users
 """

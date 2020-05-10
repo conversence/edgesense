@@ -1,3 +1,4 @@
+from builtins import next
 from datetime import datetime
 import itertools
 import networkx as nx
