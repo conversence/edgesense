@@ -1,3 +1,4 @@
+from __future__ import print_function
 # This program rearranges raw Egderyders data and builds two lists of dicts, userlist and ciommentslist, containing 
 # of the data needed to buildm graphs. These objects are then saved into files.
 import os, sys
@@ -75,35 +76,35 @@ def parse_options(argv):
         with open(argv[0], 'r') as datafile:
             data = json.load(datafile)
     except:
-        print 'Error reading the parameters file'
+        print('Error reading the parameters file')
         sys.exit(2)
     
     if not(data):
-           print 'edgesense_drupal <path to the parameters file>'
+           print('edgesense_drupal <path to the parameters file>')
            sys.exit()
 
-    if data.has_key('users') and data['users']:
+    if 'users' in data and data['users']:
      users_resource = data['users']
     
-    if data.has_key('nodes') and data['nodes']:
+    if 'nodes' in data and data['nodes']:
      nodes_resource = data['nodes']
     
-    if data.has_key('comments') and data['comments']:
+    if 'comments' in data and data['comments']:
      comments_resource = data['comments']
     
-    if data.has_key('node_title') and data['node_title']:
+    if 'node_title' in data and data['node_title']:
      node_title_field = data['node_title']
     
-    if data.has_key('timestep_size') and data['timestep_size']:
+    if 'timestep_size' in data and data['timestep_size']:
      timestep_size = int(data['timestep_size'])
     
-    if data.has_key('count_window') and data['count_window']:
+    if 'count_window' in data and data['count_window']:
      timestep_window = int(data['count_window'])
     
-    if data.has_key('timestep_count') and data['timestep_count']:
+    if 'timestep_count' in data and data['timestep_count']:
      timestep_count = int(data['timestep_count'])
     
-    if data.has_key('auth'):
+    if 'auth' in data:
      try:
          username = data['auth']['username']
      except:
@@ -113,29 +114,29 @@ def parse_options(argv):
      except:
          password = None
          
-    if data.has_key('extraction_method') and data['extraction_method']:
+    if 'extraction_method' in data and data['extraction_method']:
      extraction_method = data['extraction_method']
     
-    if data.has_key('moderator_roles') and data['moderator_roles']:
+    if 'moderator_roles' in data and data['moderator_roles']:
      admin_roles = set([e.strip() for e in data['moderator_roles'].split(",") if e.strip()])
     
-    if data.has_key('exclude_isolated') and data['exclude_isolated']:
+    if 'exclude_isolated' in data and data['exclude_isolated']:
      exclude_isolated = True
     
-    if data.has_key('dumpto') and data['dumpto']:
+    if 'dumpto' in data and data['dumpto']:
        dumpto = data['extraction_method']
     
-    if data.has_key('destination_path') and data['destination_path']:
+    if 'destination_path' in data and data['destination_path']:
        destination_path = data['destination_path']
     
-    if data.has_key('log_path') and data['log_path']:
+    if 'log_path' in data and data['log_path']:
        log_path = os.path.join(data['log_path'])
            
-    if data.has_key('datapackage'):
+    if 'datapackage' in data:
      try:
          license_type = data['datapackage']['license_type']
          license_url = data['datapackage']['license_url']
-         if data['datapackage'].has_key('title'):
+         if 'title' in data['datapackage']:
              datapackage_title = data['datapackage']['title']
          site_url = data['datapackage']['site_url']
          create_datapackage = True
@@ -253,7 +254,7 @@ def main():
                 # dump the datapackage
                 eu.resource.save(datapackage, 'datapackage.json', destination_path, True)
                 logging.info("datapackage saved")  
-        except Exception, e:
+        except Exception as e:
             logging.error(e)
             logging.error("Error reading the datapackage template")
             create_datapackage = False

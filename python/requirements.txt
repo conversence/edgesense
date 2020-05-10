@@ -1,9 +1,10 @@
-rdflib==4.2.0
-Flask==0.10.1
-Flask-Cors==1.10.0
-requests==2.2.1
-networkx==1.8.1
-python-louvain==0.3
-simplejson==3.6.4
+Flask==1.1.2
+Flask-Cors==3.0.8
+future==0.18.2
+requests==2.23.0
+networkx==2.4
+python-louvain==0.14
+simplejson==3.17.0
 py-dateutil==2.2
--e git+https://github.com/RDFLib/rdflib-jsonld#egg=rdflib_jsonld
+rdflib==5.0.0
+rdflib-jsonld=0.5

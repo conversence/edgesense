@@ -1,3 +1,4 @@
+from __future__ import print_function
 # This program rearranges raw Egderyders data and builds two lists of dicts, userlist and ciommentslist, containing 
 # of the data needed to buildm graphs. These objects are then saved into files.
 import os, sys
@@ -74,12 +75,12 @@ def parse_options(argv):
     try:
         opts, args = getopt.getopt(argv,"hu:n:c:t:s:w:f:o:",["users=","nodes=","comments=", "node-title=", "timestep-size=", "timestep-window=", "timestep-count=", "output-directory=", "username=", "password=", "extraction-method=", "admin-roles=", "exclude-isolated", "datapackage-license-type=", "datapackage-license-url=", "datapackage-title=", "dumpto="])
     except getopt.GetoptError:
-        print 'build_network.py -u <users_resource> -n <nodes_resource> -c <comments_resource> -t <node title field> -s <timestep in seconds> -w <timestep window> -f <timestep count> -o <output directory>'
+        print('build_network.py -u <users_resource> -n <nodes_resource> -c <comments_resource> -t <node title field> -s <timestep in seconds> -w <timestep window> -f <timestep count> -o <output directory>')
         sys.exit(2)
     
     for opt, arg in opts:
         if opt == '-h':
-           print 'build_network.py -u <users_resource> -n <nodes_resource> -c <comments_resource> -t <node title field> -s <timestep in seconds> -w <timestep window> -f <timestep count> -o <output directory> --username="<http basic auth user>" --password="<http basic auth password>" --admin-roles="<comma separated list of roles marking a user as part of the community team>" --exclude-isolated --datapackage-license-type="<license name for the datapackage>" --datapackage-license-url="<license url for the datapackage>" --datapackage-title="<title for the datapackage>" --dumpto="<where to save the downloaded file>"' 
+           print('build_network.py -u <users_resource> -n <nodes_resource> -c <comments_resource> -t <node title field> -s <timestep in seconds> -w <timestep window> -f <timestep count> -o <output directory> --username="<http basic auth user>" --password="<http basic auth password>" --admin-roles="<comma separated list of roles marking a user as part of the community team>" --exclude-isolated --datapackage-license-type="<license name for the datapackage>" --datapackage-license-url="<license url for the datapackage>" --datapackage-title="<title for the datapackage>" --dumpto="<where to save the downloaded file>"') 
            sys.exit()
         elif opt in ("-u", "--users"):
            users_resource = arg

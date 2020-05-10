@@ -23,7 +23,7 @@ def metrics_for_ts(nodes_map, posts_map, comments_map, network, ts, timestep, ti
         ts_metrics = extract_content_metrics(nodes_map, posts_map, comments_map, ts, timestep, timestep_window)
     
         ts_metrics.update(net_metrics)
-        if ts_metrics.has_key('full:partitions'):
+        if 'full:partitions' in ts_metrics:
             ts_metrics['partitions'] = ts_metrics['full:partitions']
         else:
             ts_metrics['partitions'] = None

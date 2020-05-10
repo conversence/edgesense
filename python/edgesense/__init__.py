@@ -1,14 +1,16 @@
-import utils
-import network
-import content
-import mailinglist
+from __future__ import print_function
+from __future__ import absolute_import
+from . import utils
+from . import network
+from . import content
+from . import mailinglist
 
 # Optional packages
 try:
-    import twitter
+    from . import twitter
 except ImportError:
     print('twitter failed to import')
 try:
-    import catalyst
+    from . import catalyst
 except ImportError:
     print('catalyst failed to import')

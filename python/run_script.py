@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 from edgesense.build_network import main as build_network_main
@@ -18,7 +19,7 @@ functions = {
 if __name__ == "__main__":
     what = sys.argv[1]
     sys.argv.remove(what)
-    if functions.has_key(what):
+    if what in functions:
         functions[what]()
     else:
         print('Wrong function called, valid: '+', '.join(function.keys()))

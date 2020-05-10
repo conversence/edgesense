@@ -97,7 +97,7 @@ def extract_content_metrics(nodes_map, posts_map, comments_map, ts, timestep, ti
     conversations = set()
     noteam_conversations = set()
     for c in comments_map.values():
-        if c['created_ts']<=ts and nodes_map.has_key(c['author_id']) and nodes_map.has_key(c['recipient_id']):
+        if c['created_ts']<=ts and c['author_id'] in nodes_map and c['recipient_id'] in nodes_map:
             a = nodes_map[c['author_id']]
             r = nodes_map[c['recipient_id']]
             cnv = '-'.join(sorted([str(c['author_id']), str(c['recipient_id'])]))

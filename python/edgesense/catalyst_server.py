@@ -67,7 +67,7 @@ def parse():
     moderator = None
     generated = datetime.now()
     
-    source_json = request.form['source'] if request.form.has_key('source') else None
+    source_json = request.form['source'] if 'source' in request.form else None
     if not source_json:
         raise InvalidUsage('Missing parameters', status_code=400)
     

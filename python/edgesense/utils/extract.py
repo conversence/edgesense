@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 import time
 import logging
@@ -25,14 +26,14 @@ methods = {
 }
 
 def is_team(user, admin_roles):
-    if user.has_key('roles') and admin_roles:
+    if 'roles' in user and admin_roles:
         user_roles = set([e.strip() for e in user['roles'].split(",") if e.strip()])
         return len(user_roles & admin_roles)>0
     else:
-        return user.has_key('roles') and user['roles']!=""
+        return 'roles' in user and user['roles']!=""
         
 def extract(how, what, data):
-    if methods.has_key(how) and methods[how].has_key(what):
+    if how in methods and what in methods[how]:
         return methods[how][what](data)
     else:
         raise Exception("Extraction method %s / %s not implemented" % (how, what))
@@ -42,14 +43,14 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
     # build a mapping of nodes (users) keyed on their id
     nodes_map = {}
     for user in allusers:
-        if not nodes_map.has_key(user['uid']):
+        if user['uid'] not in nodes_map:
             user_data = {}
             user_data['id'] = user['uid']
-            if user.has_key(node_title_field):
+            if node_title_field in user:
                 user_data['name'] = user[node_title_field]
             else:
                 user_data['name'] = "User %(uid)s" % user
-            if user.has_key('link') and user['link']!='':
+            if 'link' in user and user['link']!='':
                 user_data['link'] = user['link']    
             # timestamps
             user_data['created_ts'] = int(user['created'])
@@ -69,14 +70,14 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
     # build a mapping of posts keyed by their post id (nid)
     posts_map = {}
     for post in allnodes:
-        if not posts_map.has_key(post['nid']):
+        if post['nid'] not in posts_map:
             post_data = {}
             post_data['id'] = post['nid']
             # timestamps
             post_data['created_ts'] = int(post['created'])
             post_data['created_on'] = datetime.fromtimestamp(post_data['created_ts']).date().isoformat()
             # author (& team membership)
-            if post.has_key('uid') and nodes_map.has_key(post['uid']):
+            if 'uid' in post and post['uid'] in nodes_map:
                 post_data['author_id'] = post['uid']
                 author = nodes_map[post_data['author_id']]
                 post_data['team'] = author['team'] and author['team_ts'] <= post_data['created_ts']
@@ -86,8 +87,8 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
                 post_data['author_id'] = None
                 post_data['team'] = False
             # additional authors
-            if post.has_key('other_uids') and hasattr(post['other_uids'], '__iter__'):
-                post_data['all_authors'] = [ouid for ouid in post['other_uids'] if nodes_map.has_key(ouid)]
+            if 'other_uids' in post and hasattr(post['other_uids'], '__iter__'):
+                post_data['all_authors'] = [ouid for ouid in post['other_uids'] if ouid in nodes_map]
                 if not exclude_isolated:
                     for ouid in post_data['all_authors']:
                         nodes_map[ouid]['active'] = True
@@ -95,20 +96,20 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
                 post_data['all_authors'] = None            
             # length
             post_data['length'] = 0
-            if post.has_key('Full text') and post['Full text']:
+            if 'Full text' in post and post['Full text']:
                 post_data['length'] += len(post['Full text'])
-            if post.has_key('title') and post['title']:
+            if 'title' in post and post['title']:
                 post_data['length'] += len(post['title'])
             posts_map[post_data['id']] = post_data
         else:
-            print "Post %(nid)s was alredy added to the map (??)" % post
+            print("Post %(nid)s was alredy added to the map (??)" % post)
 
     logging.info("posts collected")  
 
     # build a mapping of comments keyed by their comment id
     comments_map = {}
     for comment in allcomments:
-        if not comments_map.has_key(comment['cid']):
+        if comment['cid'] not in comments_map:
             comment_data = {}
             comment_data['id'] = comment['cid']
         
@@ -117,7 +118,7 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
             comment_data['created_on'] = datetime.fromtimestamp(comment_data['created_ts']).date().isoformat()
         
             # author (& team membership)
-            if comment.has_key('uid') and nodes_map.has_key(comment['uid']):
+            if 'uid' in comment and comment['uid'] in nodes_map:
                 comment_data['author_id'] = comment['uid']
                 author = nodes_map[comment_data['author_id']]
                 comment_data['team'] = author['team'] and author['team_ts'] <= comment_data['created_ts']
@@ -126,11 +127,11 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
                 comment_data['team'] = False
         
             # author of the post & group id
-            if comment.has_key('nid') and posts_map.has_key(comment['nid']):
+            if 'nid' in comment and comment['nid'] in posts_map:
                 post = posts_map[comment['nid']]
                 comment_data['post_author_id'] = post['author_id']
                 # additional authors of the post
-                if post.has_key('all_authors') and hasattr(post['all_authors'], '__iter__'):
+                if 'all_authors' in post and hasattr(post['all_authors'], '__iter__'):
                     for ouid in post['all_authors']:
                         comment_data['post_all_authors'] = post['all_authors']
                 else:
@@ -141,9 +142,9 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
         
             # length
             comment_data['length'] = 0
-            if comment.has_key('comment') and comment['comment']:
+            if 'comment' in comment and comment['comment']:
                 comment_data['length'] += len(comment['comment'])
-            if comment.has_key('subject') and comment['subject']:
+            if 'subject' in comment and comment['subject']:
                 comment_data['length'] += len(comment['subject'])
         
             comments_map[comment['cid']] = comment_data
@@ -153,13 +154,13 @@ def normalized_data(allusers, allnodes, allcomments, node_title_field='uid', adm
     
     # second pass over comments, connect the comments to the parent comment
     for comment in allcomments:
-        if comments_map.has_key(comment['cid']):
+        if comment['cid'] in comments_map:
             comment_data = comments_map[comment['cid']]
             # if the comment has a pid then it was a comment to a comment
             # otherwise it was a comment to a post and the recipient is
             # the author of the post
-            if comment.has_key('pid') and comment['pid']!='0' and comment['pid']!='':
-                if comments_map.has_key(comment['pid']):
+            if 'pid' in comment and comment['pid']!='0' and comment['pid']!='':
+                if comment['pid'] in comments_map:
                     comment_data['recipient_id'] = comments_map[comment['pid']]['author_id']
                 else:
                     comment_data['recipient_id'] = None

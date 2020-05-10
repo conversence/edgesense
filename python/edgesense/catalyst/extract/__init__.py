@@ -1,3 +1,5 @@
+from __future__ import print_function
+from __future__ import absolute_import
 import datetime
 import time
 from itertools import chain
@@ -85,7 +87,7 @@ def account_as_node(graph, account, profile_of_account, moderator_test=None):
     info['created_on'] = str(created)
     info['created_ts'] = as_timestamp(created)
     info['link'] = stringify(graph.value(user, FOAF.homepage))
-    print info
+    print(info)
     return info
 
 
@@ -144,6 +146,6 @@ def convert_to_network(generated, graph, posts, creator_of_post, reply_of, moder
         'nodes': nodes
     }
 
-import simple
-import excerpts
-import ideas
+from . import simple
+from . import excerpts
+from . import ideas

@@ -1,4 +1,5 @@
-from threading import *
+from __future__ import absolute_import
+from .threading import *
 
 def promote_none_root_set_children(containers):
     result = []
@@ -52,7 +53,7 @@ def add_comments_from(container, root_message, comments, user_map, moderators, c
         if child.message:
             comments.append(map_comment(child, root_message, charset))
             user = map_user(child, moderators, charset)
-            if not(user_map.has_key(user['uid'])) or user_map[user['uid']]['created'] > user['created']:
+            if not(user['uid'] in user_map) or user_map[user['uid']]['created'] > user['created']:
                 user_map[user['uid']] = user
         add_comments_from(child, root_message, comments, user_map, moderators, charset)
     
@@ -64,7 +65,7 @@ def users_nodes_comments_from(containers, moderators, charset='utf-8'):
         if container.message:
             nodes.append(map_node(container, charset))
             user = map_user(container, moderators, charset)
-            if not(user_map.has_key(user['uid'])) or user_map[user['uid']]['created'] > user['created']:
+            if not(user['uid'] in user_map) or user_map[user['uid']]['created'] > user['created']:
                 user_map[user['uid']] = user
         
         add_comments_from(container, container, comments, user_map, moderators, charset)

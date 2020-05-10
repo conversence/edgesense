@@ -66,7 +66,7 @@ def extract_edges(nodes_map, comments_map):
     
     # build the comments network to use for metrics
     for comment in valid_comments:
-        if nodes_map.has_key(comment['author_id']):
+        if comment['author_id'] in nodes_map:
             nodes_map[comment['author_id']]['active'] = True
         else:
             logging.info("error: node %(n)s was linked but not found in the nodes_map" % {'n':comment['author_id']})  
@@ -77,7 +77,7 @@ def extract_edges(nodes_map, comments_map):
             links = [make_edge(comment, comment['recipient_id'])]
         
         for link in links:
-            if nodes_map.has_key(link['target']):
+            if link['target'] in nodes_map:
                 nodes_map[link['target']]['active'] = True
             else:
                 logging.info("error: node %(n)s was linked but not found in the nodes_map" % {'n':link['target']})  
@@ -105,12 +105,12 @@ def extract_multiauthor_post_edges(nodes_map, posts_map):
                     'effort': post['length'],
                     'team': post['team']
                 }
-                if nodes_map.has_key(authors[0]):
+                if authors[0] in nodes_map:
                     nodes_map[authors[0]]['active'] = True
                 else:
                     logging.info("error: node %(n)s was linked but not found in the nodes_map" % {'n':authors[0]})  
         
-                if nodes_map.has_key(authors[1]):
+                if authors[1] in nodes_map:
                     nodes_map[authors[1]]['active'] = True
                 else:
                     logging.info("error: node %(n)s was linked but not found in the nodes_map" % {'n':authors[1]})  

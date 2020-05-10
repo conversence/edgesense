@@ -52,7 +52,7 @@ def map_comment(mapped_post):
 def extract_users(posts_mapped):
     users_map = {}
     for user in [map_user(post) for post in posts_mapped]:
-        if not(users_map.has_key(user['uid'])) or user['created'] <= users_map[user['uid']]['created']:
+        if not(user['uid'] in users_map) or user['created'] <= users_map[user['uid']]['created']:
             users_map[user['uid']] = user
     return users_map.values()
 

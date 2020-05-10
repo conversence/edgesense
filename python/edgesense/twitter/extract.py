@@ -11,7 +11,7 @@ def add_user(users_map,user_id,screen_name,created_ts):
         'name': screen_name,
         'link': link
     }
-    if not(users_map.has_key(user_id)) or created_ts <= users_map[user_id]['created']:
+    if not(user_id in users_map) or created_ts <= users_map[user_id]['created']:
         users_map[user_id] = user
     
 """ We consider each user that has been mentioned (not only the mentioning users)
@@ -39,7 +39,7 @@ def add_node(nodes_map,user_id,screen_name,created_ts,text):
         'created': created_ts,
         'title': text
     }
-    if not(nodes_map.has_key(user_id)) or created_ts <= nodes_map[user_id]['created']:
+    if not(user_id in nodes_map) or created_ts <= nodes_map[user_id]['created']:
         nodes_map[user_id] = node
 
 """ We consider for each user the earliest tweet where he was mentioned or their earliest tweet

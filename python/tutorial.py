@@ -1,3 +1,4 @@
+from __future__ import print_function
 # This program rearranges raw Egderyders data and builds two lists of dicts, userlist and ciommentslist, containing 
 # of the data needed to buildm graphs. These objects are then saved into files.
 import os, sys
@@ -23,12 +24,12 @@ def parse_options(argv):
     try:
         opts, args = getopt.getopt(argv,"s:f:",["source=","file="])
     except getopt.GetoptError:
-        print 'tutorial.py -s <source dir> -f <output filename>'
+        print('tutorial.py -s <source dir> -f <output filename>')
         sys.exit(2)
     
     for opt, arg in opts:
         if opt == '-h':
-           print 'tutorial.py -s <source dir> -f <output filename>' 
+           print('tutorial.py -s <source dir> -f <output filename>') 
            sys.exit()
         elif opt in ("-s", "--source"):
            basepath = arg
@@ -61,30 +62,30 @@ def main(argv):
         f = open(os.path.join(source_path,filename), 'r')
         try:
             parsed = json.load(f)
-            if parsed.has_key('run_id'):
+            if 'run_id' in parsed:
                 run_id = parsed['run_id']
             else:
                 run_id = base_run_id+'--'+str(fake_run_id)
                 fake_run_id += 1
             
-            if not runs.has_key(run_id):
+            if run_id not in runs:
                 runs[run_id] = {}
         
             run_obj = runs[run_id]
             run_obj['run_id'] = run_id
-            if parsed.has_key('base'):
+            if 'base' in parsed:
                 run_obj['base'] = parsed['base']
                 m = re.search('(\d\d\d\d)-(\d\d)-(\d\d)-\d\d-\d\d-\d\d$', parsed['base'])
                 if m:
                     run_obj['date'] = m.group(1)+"-"+m.group(2)+"-"+m.group(3)
-            if parsed.has_key('comments'):
+            if 'comments' in parsed:
                 run_obj['comments'] = parsed['comments'].encode('utf-8').strip()
             # collect the tutorial answer results
-            if parsed.has_key('answers'):
+            if 'answers' in parsed:
                 for a in parsed['answers']:
                     run_obj[a['step']] = a['success']
             # collect the tutorial survey results
-            if parsed.has_key('surveys'):
+            if 'surveys' in parsed:
                 for a in parsed['surveys']:
                     run_obj[a['step']] = a['value']
             
