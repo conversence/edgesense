@@ -1,12 +1,9 @@
 # requires flask and flask-cors
 from future import standard_library
 standard_library.install_aliases()
-import os, sys, urllib.parse
-import json
+import os
 from datetime import datetime
-import time
 import logging
-import networkx as nx
 
 from edgesense.utils.logger_initializer import initialize_logger
 import edgesense.utils as eu
@@ -16,7 +13,8 @@ from edgesense.metrics import calculate_network_metrics
 from flask import Flask
 from flask import request
 from flask import jsonify
-from flask.ext.cors import CORS, cross_origin
+from flask_cors import CORS
+
 
 class InvalidUsage(Exception):
     status_code = 400
@@ -33,6 +31,7 @@ class InvalidUsage(Exception):
         rv['message'] = self.message
         return rv
 
+
 basepath = os.path.dirname(__file__)
 static_path = os.path.abspath(os.path.join(basepath, "..", "..", "static"))
 destination_path = os.path.abspath(os.path.join(static_path, "json"))
@@ -40,15 +39,18 @@ app = Flask(__name__, static_folder=static_path, static_url_path='')
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
-    
+
+
 @app.route("/")
 def index():
     return ""
+
 
 @app.route("/parse", methods=['GET','POST'])
 def parse():

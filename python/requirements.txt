@@ -7,4 +7,4 @@ python-louvain==0.14
 simplejson==3.17.0
 py-dateutil==2.2
 rdflib==5.0.0
-rdflib-jsonld=0.5
+rdflib-jsonld==0.5

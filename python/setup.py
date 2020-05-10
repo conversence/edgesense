@@ -52,8 +52,8 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
     install_requires=[
-        'networkx==1.8.1',
-        'python-louvain==0.3'
+        'networkx==2.4',
+        'python-louvain==0.14'
     ],
     
     # List additional groups of dependencies here (e.g. development dependencies).

@@ -19,10 +19,10 @@ def save_gexf(graph, filename):
     G = graph.copy()
     
     # cleanup and prepare the graph
-    for node in G.nodes():
-        prepare_gefx_attributes(G.node[node])
+    for node in G.nodes:
+        prepare_gefx_attributes(G.nodes[node])
     
-    for node in G.nodes_iter():
+    for node in G:
         for neighbour in G[node].keys():
             for edge_attrs in G[node][neighbour].values():
                 prepare_gefx_attributes(edge_attrs)
@@ -47,10 +47,10 @@ class GEXFExporter(GEXFWriter):
         self.graph_element.set('timeformat', 'string')
         for a in self.graph_element.findall("attributes"):
             a.set('timeformat', 'string')
-                
+
     def add_nodes(self, G, graph_element):
         nodes_element = Element('nodes')
-        for node,data in G.nodes_iter(data=True):
+        for node,data in G.nodes(data=True):
             node_data=data.copy()
             node_id = make_str(node_data.pop('id', node))
             kw={'id':node_id}
@@ -95,7 +95,7 @@ class GEXFExporter(GEXFWriter):
         def edge_key_data(G):
             # helper function to unify multigraph and graph edge iterator
             if G.is_multigraph():
-                for u,v,key,data in G.edges_iter(data=True,keys=True):
+                for u,v,key,data in G.edges(data=True,keys=True):
                     edge_data=data.copy()
                     edge_data.update(key=key)
                     edge_id=edge_data.pop('id',None)
@@ -103,7 +103,7 @@ class GEXFExporter(GEXFWriter):
                         edge_id=next(self.edge_id)
                     yield u,v,edge_id,edge_data
             else:
-                for u,v,data in G.edges_iter(data=True):
+                for u,v,data in G.edges(data=True):
                     edge_data=data.copy()
                     edge_id=edge_data.pop('id',None)
                     if edge_id is None:
@@ -136,8 +136,8 @@ class GEXFExporter(GEXFWriter):
             except KeyError:
                 pass
             
-            source_id = make_str(G.node[u].get('id', u))
-            target_id = make_str(G.node[v].get('id', v))
+            source_id = make_str(G.nodes[u].get('id', u))
+            target_id = make_str(G.nodes[v].get('id', v))
             edge_element = Element("edge",
                                    source=source_id,target=target_id,
                                    **kw)
